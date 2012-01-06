@@ -1,0 +1,38 @@
+{
+  
+  "apps": { 
+    "input": "apps",
+    "styles": "css",
+    "static": "static",
+    "templates": "templates",
+    "scripts": "js",
+    "output": "public/apps"
+  },
+  
+  "vendors": {
+    "input": "vendors",
+    "distribution": {
+      "ember": ["handlebars", "ember-metal", "ember-runtime", "ember-views", "ember-states", "metamorph", "ember-handlebars"]
+    },
+    "styles": "css",
+    "static": "static",
+    "templates": "templates",
+    "scripts": "lib",
+    "output": "public/shared"
+  },
+  
+  "tmpDir": "tmp",
+  "distDir": "dist",
+  
+  "server": {
+    "static": "public",
+    "port": "3000",
+    "proxy": {
+      "useProxy": true,
+      "host": "localhost",
+      "port": 3101,
+      "url": "/backend"      
+    }
+  }
+  
+}
