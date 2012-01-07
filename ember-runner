@@ -1,1 +1,1 @@
-node /Users/icono/Workspace/sc/ember-runner/ember-runner.js
+node /Users/icono/Workspace/sc/ember-runner/ember-runner.js $1 $2 $3
