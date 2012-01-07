@@ -37,7 +37,8 @@ runner.task('build', 'Build libraries and applications', ['task:configure', 'tas
 });
 
 runner.task('apps', 'Generate applications libraries', function(callback) {
-  var distributions = buildInfo.apps.distributions,
+  var apps = buildInfo.apps,
+      distributions = apps.distributions,
       packages, name;
   
   for (var dist in distributions) {
@@ -49,7 +50,11 @@ runner.task('apps', 'Generate applications libraries', function(callback) {
       pm.createPackage({
         isApp: true,
         name: name,
-        path: [buildInfo.srcApps, pack].join('/')
+        path: [buildInfo.srcApps, pack].join('/'),
+        styles: apps.styles,
+        static: apps.static,
+        templates: apps.templates,
+        scripts: apps.scripts
       });
     });
   }
@@ -58,7 +63,8 @@ runner.task('apps', 'Generate applications libraries', function(callback) {
 });
 
 runner.task('vendors', 'Generate vendors libraries', function(callback) {
-  var distributions = buildInfo.vendors.distributions,
+  var vendors = buildInfo.vendors,
+      distributions = vendors.distributions,
       packages, name;
   
   for (var dist in distributions) {
@@ -70,7 +76,11 @@ runner.task('vendors', 'Generate vendors libraries', function(callback) {
       pm.createPackage({
         isVendor: true,
         name: name,
-        path: [buildInfo.srcVendors, pack].join('/')
+        path: [buildInfo.srcVendors, pack].join('/'),
+        styles: vendors.styles,
+        static: vendors.static,
+        templates: vendors.templates,
+        scripts: vendors.scripts
       });
     });
   }
