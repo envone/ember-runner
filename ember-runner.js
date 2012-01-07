@@ -25,38 +25,19 @@ runner.task('preview', 'Run preview server', ['build', 'watch'], function(callba
 });
 
 runner.task('watch', 'Run preview server', ['build'], function(callback) {
-  helpers.watchTree(workFiles, function(f, curr, prev) {
-    //console.log(f);
+  pm.watchForChanges(function(err, success) {
+    callback(null, true);
   });
-  /*watch.createMonitor(workDir, function (monitor) {
-    monitor.on("created", function (f, stat) {
-      // Handle new file      
-    });
-    
-    monitor.on("changed", function (f, curr, prev) {
-      // Handle changes
-    });
-    
-    monitor.on("removed", function (f, stat) {
-      // Handle removed files  
-    });
-  });
-  */
-  callback(null, true);
 });
 
-runner.task('build', 'Build libraries and applications', ['task:configure', 'task:walk', 'apps', 'vendors'], function(callback) {
-  
-  callback(null, true);
+runner.task('build', 'Build libraries and applications', ['task:configure', 'task:walk', 'vendors', 'apps'], function(callback) {
+  pm.build(function(err, success) {
+    callback(null, true);    
+  });
 });
 
 runner.task('apps', 'Generate applications libraries', function(callback) {
-  callback(null, true);
-});
-
-runner.task('vendors', 'Generate vendors libraries', function(callback) {
-  var vendorPackages = [],
-      distributions = buildInfo.vendors.distributions,
+  var distributions = buildInfo.apps.distributions,
       packages, name;
   
   for (var dist in distributions) {
@@ -64,8 +45,32 @@ runner.task('vendors', 'Generate vendors libraries', function(callback) {
     packages.forEach(function(pack) {
       name = pack.split('/');
       name = name[name.length - 1];
-      vendorPackages = pm.createPackage({
-        name: name
+      
+      pm.createPackage({
+        isApp: true,
+        name: name,
+        path: [buildInfo.srcApps, pack].join('/')
+      });
+    });
+  }
+  
+  callback(null, true);
+});
+
+runner.task('vendors', 'Generate vendors libraries', function(callback) {
+  var distributions = buildInfo.vendors.distributions,
+      packages, name;
+  
+  for (var dist in distributions) {
+    packages = distributions[dist];
+    packages.forEach(function(pack) {
+      name = pack.split('/');
+      name = name[name.length - 1];
+      
+      pm.createPackage({
+        isVendor: true,
+        name: name,
+        path: [buildInfo.srcVendors, pack].join('/')
       });
     });
   }
@@ -97,7 +102,21 @@ runner.task('task:configure', 'Retrieve configuration parameters', function(call
     buildInfo.tgtApps = [workDir, buildInfo.apps.output].join('/');
     buildInfo.tgtVendors = [workDir, buildInfo.vendors.output].join('/');
 
-    callback(null, true);
+    // Generate apps distribution if not found
+    if (!buildInfo.apps.distributions) {
+      buildInfo.apps.distributions = {};
+      fs.readdir(buildInfo.srcApps, function(err, lists) {
+        if (err) return callback("Error retrieing apps names");
+        
+        lists.forEach(function(list) {
+          buildInfo.apps.distributions[list] = [list];
+        });
+        
+        callback(null, true);        
+      });
+    } else {
+      callback(null, true);
+    }    
   });
 });
 
