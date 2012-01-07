@@ -13,8 +13,8 @@
     "input": "vendors",
     "distributions": {
       "ember": ["ember.js/packages/handlebars", "ember.js/packages/ember-metal", "ember.js/packages/ember-runtime", "ember.js/packages/ember-views", "ember.js/packages/ember-states", "ember.js/packages/metamorph", "ember.js/packages/ember-handlebars"],
-      "addons": ["sproutcore-datastore", "sproutcore-routing", "sproutcore-statechart", "sproutcore-touch"],
-      "shared": ["envone-core", "envone-desktop-iu", "envone-desktop", "business-core"]
+      "addons": ["sproutcore-datastore/packages/sproutcore-indexset", "sproutcore-datastore/packages/sproutcore-datastore", "sproutcore-routing", "sproutcore-statechart", "sproutcore-touch/packages/sproutcore-touch"],
+      "shared": ["envone-core", "envone-desktop-ui", "envone-desktop", "business-core"]
     },
     "styles": "css",
     "static": "static",
