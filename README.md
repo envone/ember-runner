@@ -1,4 +1,4 @@
-# Starting with ember-runne
+# Starting with ember-runner
 
 ## Installation
 
