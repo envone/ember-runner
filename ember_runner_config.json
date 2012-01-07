@@ -11,8 +11,10 @@
   
   "vendors": {
     "input": "vendors",
-    "distribution": {
-      "ember": ["handlebars", "ember-metal", "ember-runtime", "ember-views", "ember-states", "metamorph", "ember-handlebars"]
+    "distributions": {
+      "ember.js": ["ember.js/packages/handlebars", "ember.js/packages/ember-metal", "ember.js/packages/ember-runtime", "ember.js/packages/ember-views", "ember.js/packages/ember-states", "ember.js/packages/metamorph", "ember.js/packages/ember-handlebars"],
+      "addons.js": ["sproutcore-datastore", "sproutcore-routing", "sproutcore-statechart", "sproutcore-touch"],
+      "shared.js": ["envone-core", "envone-desktop-iu", "envone-desktop", "business-core"]
     },
     "styles": "css",
     "static": "static",
@@ -31,7 +33,7 @@
       "useProxy": true,
       "host": "localhost",
       "port": 3101,
-      "url": "/backend"      
+      "prefix": "^\/backend"
     }
   }
   

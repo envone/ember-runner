@@ -2,7 +2,8 @@
 var fs = require('fs'),
     async = require('async'),
     runner = require('./lib/runner'),
-    helpers = require('./lib/helpers'),    
+    helpers = require('./lib/helpers'),
+    pm = require('./lib/packages'),
     args = process.argv,
     workDir = process.cwd();
     
@@ -17,21 +18,58 @@ runner.task('default', 'Run preview server', ['preview'], function(callback) {
   callback(null, true);
 });
 
-runner.task('preview', 'Run preview server', ['build'], function(callback) {
+runner.task('preview', 'Run preview server', ['build', 'watch'], function(callback) {
   runner.runServer(buildInfo.server, function(err, success) {
     callback(null, true);    
   });
 });
 
-runner.task('build', 'Build libraries and applications', ['apps', 'vendors'], function(callback) {
+runner.task('watch', 'Run preview server', ['build'], function(callback) {
+  helpers.watchTree(workFiles, function(f, curr, prev) {
+    //console.log(f);
+  });
+  /*watch.createMonitor(workDir, function (monitor) {
+    monitor.on("created", function (f, stat) {
+      // Handle new file      
+    });
+    
+    monitor.on("changed", function (f, curr, prev) {
+      // Handle changes
+    });
+    
+    monitor.on("removed", function (f, stat) {
+      // Handle removed files  
+    });
+  });
+  */
   callback(null, true);
 });
 
-runner.task('apps', 'Generate applications libraries', ['task:configure'], function(callback) {
+runner.task('build', 'Build libraries and applications', ['task:configure', 'task:walk', 'apps', 'vendors'], function(callback) {
+  
   callback(null, true);
 });
 
-runner.task('vendors', 'Generate vendors libraries', ['task:configure'], function(callback) {
+runner.task('apps', 'Generate applications libraries', function(callback) {
+  callback(null, true);
+});
+
+runner.task('vendors', 'Generate vendors libraries', function(callback) {
+  var vendorPackages = [],
+      distributions = buildInfo.vendors.distributions,
+      packages, name;
+  
+  for (var dist in distributions) {
+    packages = distributions[dist];
+    packages.forEach(function(pack) {
+      name = pack.split('/');
+      name = name[name.length - 1];
+      vendorPackages = pm.createPackage({
+        name: name
+      });
+    });
+  }
+  
   callback(null, true);
 });
 
@@ -58,7 +96,7 @@ runner.task('task:configure', 'Retrieve configuration parameters', function(call
     buildInfo.tmpVendors = [workDir, buildInfo.tmpDir, buildInfo.vendors.input].join('/');
     buildInfo.tgtApps = [workDir, buildInfo.apps.output].join('/');
     buildInfo.tgtVendors = [workDir, buildInfo.vendors.output].join('/');
-                
+
     callback(null, true);
   });
 });
