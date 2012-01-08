@@ -20,7 +20,7 @@
     "static": "static",
     "templates": "templates",
     "scripts": "lib",
-    "output": "public/shared"
+    "output": "public/libraries"
   },
   
   "tmpDir": "tmp",

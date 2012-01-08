@@ -18,7 +18,7 @@ runner.task('default', 'Run preview server', ['preview'], function(callback) {
   callback(null, true);
 });
 
-runner.task('preview', 'Run preview server', ['build', 'watch'], function(callback) {
+runner.task('preview', 'Run preview server', ['watch'], function(callback) {
   runner.runServer(buildInfo.server, function(err, success) {
     callback(null, true);    
   });
@@ -26,30 +26,45 @@ runner.task('preview', 'Run preview server', ['build', 'watch'], function(callba
 
 runner.task('watch', 'Run preview server', ['build'], function(callback) {
   pm.watchForChanges(function(err, success) {
+    console.log('WATCH');
     callback(null, true);
   });
 });
 
 runner.task('build', 'Build libraries and applications', ['task:configure', 'task:walk', 'vendors', 'apps'], function(callback) {
   pm.build(function(err, success) {
-    callback(null, true);    
+    var distInfos = buildInfo.vendors.distInfo.concat(buildInfo.apps.distInfo),
+        pending = distInfos.length;
+    
+    distInfos.forEach(function(distInfo) {
+      pm.generateDistributionsFor(distInfo, function(err, success) {
+        if (--pending === 0) callback(null, true);
+      });
+    });    
   });
 });
 
 runner.task('apps', 'Generate applications libraries', function(callback) {
   var apps = buildInfo.apps,
       distributions = apps.distributions,
-      packages, name;
+      packages, name, distPackages;
+  
+  buildInfo.apps.distInfo = [];
   
   for (var dist in distributions) {
+    distPackages = [];
+    
     packages = distributions[dist];
     packages.forEach(function(pack) {
       name = pack.split('/');
       name = name[name.length - 1];
       
+      distPackages.push(name);
+      
       pm.createPackage({
         isApp: true,
         name: name,
+        distribution: dist,
         path: [buildInfo.srcApps, pack].join('/'),
         styles: apps.styles,
         static: apps.static,
@@ -57,6 +72,13 @@ runner.task('apps', 'Generate applications libraries', function(callback) {
         scripts: apps.scripts
       });
     });
+    
+    buildInfo.apps.distInfo.push({
+      name: dist,
+      packages: distPackages,
+      output: [buildInfo.apps.output, dist].join('/')
+    });
+    
   }
   
   callback(null, true);
@@ -65,23 +87,36 @@ runner.task('apps', 'Generate applications libraries', function(callback) {
 runner.task('vendors', 'Generate vendors libraries', function(callback) {
   var vendors = buildInfo.vendors,
       distributions = vendors.distributions,
-      packages, name;
+      packages, name, distPackages;
   
-  for (var dist in distributions) {
-    packages = distributions[dist];
+  buildInfo.vendors.distInfo = [];
+  
+  for (var dist in distributions) {    
+    distPackages = [];
+    
+    packages = distributions[dist];    
     packages.forEach(function(pack) {
       name = pack.split('/');
       name = name[name.length - 1];
       
+      distPackages.push(name);
+      
       pm.createPackage({
         isVendor: true,
         name: name,
+        distribution: dist,
         path: [buildInfo.srcVendors, pack].join('/'),
         styles: vendors.styles,
         static: vendors.static,
         templates: vendors.templates,
         scripts: vendors.scripts
       });
+    });
+    
+    buildInfo.vendors.distInfo.push({
+      name: dist,
+      packages: distPackages,
+      output: buildInfo.vendors.output
     });
   }
   
@@ -159,6 +194,8 @@ runner.task('task:walk', 'Check for all files to be used', function(callback) {
 });
 
 var defaultTask = args[0];
+
+console.log('Choosen target: ' + defaultTask);
 
 runner.invoke(defaultTask, function(err, success) {
   if (err) return console.log('Task finished with errors');
