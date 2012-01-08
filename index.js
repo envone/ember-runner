@@ -192,7 +192,7 @@ runner.task('task:walk', 'Check for all files to be used', function(callback) {
   });
   
 });
-
+/*
 var defaultTask = args[0];
 
 console.log('Choosen target: ' + defaultTask);
@@ -201,3 +201,4 @@ runner.invoke(defaultTask, function(err, success) {
   if (err) return console.log('Task finished with errors');
   console.log('Task finished succesfully');
 });
+*/
