@@ -135,7 +135,7 @@ runner.task('task:configure', 'Retrieve configuration parameters', function(call
   var self = this;
   
   fs.readFile([__dirname, 'ember_runner_config.json'].join('/'), function(err, file) {
-    if (err) return callback("Error no build.json file found");
+    if (err) return callback("Error no ember_runner_config.json file found");
     
     buildInfo = JSON.parse(file);
     
@@ -192,13 +192,3 @@ runner.task('task:walk', 'Check for all files to be used', function(callback) {
   });
   
 });
-/*
-var defaultTask = args[0];
-
-console.log('Choosen target: ' + defaultTask);
-
-runner.invoke(defaultTask, function(err, success) {
-  if (err) return console.log('Task finished with errors');
-  console.log('Task finished succesfully');
-});
-*/
