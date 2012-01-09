@@ -5,9 +5,15 @@ The handlers are common action that you need to chain to transform a source file
 
 ## Published Handlers
 
-- **removeRequires**: This handlers removes all require('%@') found un each .js scripts.
+- **encloseExportFunction**: For each file enclouse to be ready for use in yout browser
+- **includeTemplate**: Add .handlebars file to Ember.TEMPLATES collection, so your view can found it.
+- **removeRequires**: This handlers removes all require('*') found in each .js scripts.
 
 ## Comming Handlers
+
+- **less**: Transform your less style to css
+- **stylus**: Transform your less style to css
+- **uglify-js**: Minifies your script
 
 # Starting with ember-runner
 
