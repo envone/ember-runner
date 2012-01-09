@@ -1,11 +1,11 @@
 # Introducing ember-runner
 
 # Handlers
-The handlers are common action that you need to chain to transform a source file to a distributable one, for example an stlye file with .less extension will be transformed to a .css ready for use in your deployed app.
+The handlers are common action that you need to chain to transform a source file to a distributable one, for example an style file with .less extension will be transformed to a .css, and then minify to reduce the unrequired space, so will be ready for use in your deployed app.
 
-## Active Handlres
+## Published Handlers
 
-### removeRequires: This handlers removes all require('%@') found un each .js scripts.
+- **removeRequires**: This handlers removes all require('%@') found un each .js scripts.
 
 ## Comming Handlers
 
