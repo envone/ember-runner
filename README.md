@@ -8,6 +8,7 @@ This build tool is for the crazy ones that loves Node.JS and EmberJS, and for th
 - **Auto-Deploy**: Generates the required libraries, styles, and templates on the fly after you save the file
 - **Proxy**: Allow you to call your backend without tricks.
 - **Build Distributions**: You can manage how the scripts are concatenated to generate a script, for example now you can join your ember.js with your frameworks to generate only one file.
+- **Run more that one application at once**
 
 ## How it works
 The idea is to apply best practices we have learned over time, and we found that we separate these sripts that belong to an application and other than belong to a framework, and each one manages common resouces that will be separated to identify them easily, the following is the idea of the structure of work that is inspired by this tool:
