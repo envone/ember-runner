@@ -4,11 +4,11 @@ This build tool is for the crazy ones that loves Node.JS and EmberJS, and for th
 ## Some of the features you will love are:
 - **Preview Mode**: Run your application in preview mode so you can debug it.
 - **Production Mode**: Run in production mode, so you can test performance, files sizes and so one.
-- **Generator**: Will generate files for you with the ``-g`` flag. (Comming soon)
+- **Generator**: Will generate files for you with the ``-g`` flag. (Coming soon)
 - **Auto-Deploy**: Generates the required libraries, styles, and templates on the fly after you save the file
 
 ## How it works
-The idea is to apply best practices we have learned over time, and we found that we separate these sripts that belong to an application and other than belong to a framework, and each one manages common resouces that will be separated to identify them easily, the following is the idea of the structure of work that is inspired in this tool:
+The idea is to apply best practices we have learned over time, and we found that we separate these sripts that belong to an application and other than belong to a framework, and each one manages common resouces that will be separated to identify them easily, the following is the idea of the structure of work that is inspired by this tool:
 
 ```
 - <your project>
@@ -41,15 +41,17 @@ The handlers are common action that you need to chain to transform a source file
 
 ## Published Handlers
 
-- **encloseExportFunction**: For each file enclouse to be ready for use in yout browser
+- **encloseExportFunction**: For each file enclose to be ready for use in your browser
 - **includeTemplate**: Add .handlebars file to Ember.TEMPLATES collection, so your view can found it.
 - **removeRequires**: This handlers removes all require('*') found in each .js scripts.
+- **less**: Transform your less style to css
 
 ## Comming Handlers
 
-- **less**: Transform your less style to css
 - **stylus**: Transform your less style to css
+- **uglify-css**: Minifies your stylesheet
 - **uglify-js**: Minifies your script
+- **jslint**: Check you javascript with jslint to check for inconsistencies.
 - **spriteImages**: Concatenates images to save spaces and the number of request when fetching resources.
 
 # Starting with ember-runner
