@@ -1,7 +1,7 @@
 {
   "name": "ember-runner",
   "description": "EmberJS preview and build tool for Node.JS",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "author": "Juan Pablo Goldfinger (http://envone.com)",
   "bin": {
     "ember-runner": "./bin/cli.js"
@@ -9,7 +9,8 @@
   "dependencies": {
     "async": ">= 0",
     "express": ">= 0",
-    "http-proxy": ">= 0"
+    "http-proxy": ">= 0",
+    "less": ">= 0"
   },
   "main": "ember-runner",
   "repository": "git://github.com/envone/ember-runner.git",
