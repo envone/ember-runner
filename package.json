@@ -10,7 +10,8 @@
     "async": ">= 0",
     "express": ">= 0",
     "http-proxy": ">= 0",
-    "less": ">= 0"
+    "less": ">= 0",
+    "mkdirp": ">= 0"
   },
   "main": "ember-runner",
   "repository": "git://github.com/envone/ember-runner.git",

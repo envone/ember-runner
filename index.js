@@ -6,7 +6,7 @@ var fs = require('fs'),
     pm = require('./lib/packages'),
     args = process.argv,
     workDir = process.cwd();
-    
+
 // Configuration vars
 var buildInfo, workFiles;
 
@@ -30,25 +30,23 @@ runner.task('watch', 'Run preview server', ['build'], function(callback) {
   });
 });
 
-runner.task('build', 'Build libraries and applications', ['task:configure', 'task:walk', 'vendors', 'apps'], function(callback) {
+runner.task('build', 'Build libraries and applications', ['task:configure', 'task:clean', 'task:walk', 'vendors', 'apps'], function(callback) {
   pm.build(function(err, success) {
-    var distInfos = buildInfo.vendors.distInfo.concat(buildInfo.apps.distInfo),
+    var distInfos = pm.distributions,
         pending = distInfos.length;
     
     distInfos.forEach(function(distInfo) {
-      pm.generateDistributionsFor(distInfo, function(err, success) {
+      distInfo.distributeIt(function(err, success) {
         if (--pending === 0) callback(null, true);
       });
-    });    
+    });
   });
 });
 
 runner.task('apps', 'Generate applications libraries', function(callback) {
   var apps = buildInfo.apps,
       distributions = apps.distributions,
-      packages, name, distPackages;
-  
-  buildInfo.apps.distInfo = [];
+      packages, distPackages, name;
   
   for (var dist in distributions) {
     distPackages = [];
@@ -58,26 +56,23 @@ runner.task('apps', 'Generate applications libraries', function(callback) {
       name = pack.split('/');
       name = name[name.length - 1];
       
-      distPackages.push(name);
-      
-      pm.createPackage({
+      distPackages.push(pm.createPackage({
         isApp: true,
         name: name,
-        distribution: dist,
+        //distribution: dist,
         path: [buildInfo.srcApps, pack].join('/'),
         styles: apps.styles,
         static: apps.static,
         templates: apps.templates,
         scripts: apps.scripts
-      });
+      }));
     });
-    
-    buildInfo.apps.distInfo.push({
+
+    pm.createDistInfo({
       name: dist,
       packages: distPackages,
       output: [buildInfo.apps.output, dist].join('/')
-    });
-    
+    });    
   }
   
   callback(null, true);
@@ -86,10 +81,8 @@ runner.task('apps', 'Generate applications libraries', function(callback) {
 runner.task('vendors', 'Generate vendors libraries', function(callback) {
   var vendors = buildInfo.vendors,
       distributions = vendors.distributions,
-      packages, name, distPackages;
-  
-  buildInfo.vendors.distInfo = [];
-  
+      packages, distPackages, name;
+
   for (var dist in distributions) {    
     distPackages = [];
     
@@ -98,21 +91,19 @@ runner.task('vendors', 'Generate vendors libraries', function(callback) {
       name = pack.split('/');
       name = name[name.length - 1];
       
-      distPackages.push(name);
-      
-      pm.createPackage({
+      distPackages.push(pm.createPackage({
         isVendor: true,
         name: name,
-        distribution: dist,
+        //distribution: dist,
         path: [buildInfo.srcVendors, pack].join('/'),
         styles: vendors.styles,
         static: vendors.static,
         templates: vendors.templates,
         scripts: vendors.scripts
-      });
+      }));
     });
     
-    buildInfo.vendors.distInfo.push({
+    pm.createDistInfo({
       name: dist,
       packages: distPackages,
       output: buildInfo.vendors.output
@@ -127,7 +118,17 @@ runner.task('vendors', 'Generate vendors libraries', function(callback) {
 // ================
 
 runner.task('task:clean', 'Clean all generated directories', function(callback) {
-  callback(null, true);
+  var pending = 2;
+  
+  // remove public/apps folder
+  fs.rmdir(buildInfo.apps.output, function(err) {
+    if (--pending === 0) callback(null, true);
+  });
+  
+  fs.rmdir(buildInfo.vendors.output, function(err) {
+    if (--pending === 0) callback(null, true);
+  });
+  
 });
 
 runner.task('task:configure', 'Retrieve configuration parameters', function(callback) {
