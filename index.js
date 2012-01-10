@@ -24,7 +24,7 @@ runner.task('preview', 'Run preview server', ['watch'], function(callback) {
   });
 });
 
-runner.task('watch', 'Run preview server', ['build'], function(callback) {
+runner.task('watch', 'Watch for files changes', ['build'], function(callback) {
   pm.watchForChanges(function(err, success) {
     callback(null, true);
   });
@@ -41,6 +41,10 @@ runner.task('build', 'Build libraries and applications', ['task:configure', 'tas
       });
     });
   });
+});
+
+runner.task('tests', 'Build tests', ['build'], function(callback) {
+  callback(null, true);
 });
 
 runner.task('apps', 'Generate applications libraries', function(callback) {
