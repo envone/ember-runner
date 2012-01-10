@@ -3,6 +3,7 @@ var fs = require('fs'),
     async = require('async'),
     runner = require('./lib/runner'),
     helpers = require('./lib/helpers'),
+    phantom = require('phantom'),
     pm = require('./lib/packages'),
     args = process.argv,
     workDir = process.cwd();
