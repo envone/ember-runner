@@ -13,7 +13,8 @@
     "less": ">= 1.1.6",
     "mkdirp": ">= 0.2.2",
     "watch": ">= 0.5.0",
-    "stylus": ">= 0.22.2"
+    "stylus": ">= 0.22.2",
+    "phantom": ">= 0.3.2"
   },
   "main": "ember-runner",
   "repository": "git://github.com/envone/ember-runner.git",
