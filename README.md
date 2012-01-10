@@ -38,6 +38,7 @@ The idea is to apply best practices we have learned over time, and we found that
     - <your framework A>
     - <your framework B>
 ```
+**[PLEASE NOTE]**: Don't add manually files in public/apps (apps.output) and public/libraries (vendors/output), these folders are deleted each time you start the server.
 
 # Handlers
 The handlers are common action that you need to chain to transform a source file to a distributable one, for example an style file with .less extension will be transformed to a .css, and then minify to reduce the unrequired space, so will be ready for use in your deployed app.
