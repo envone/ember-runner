@@ -72,3 +72,67 @@ In your EmberJS root directory run to run a preview develpment server
 ``` javascript
 ember-runner
 ```
+# Configuring ember_runner_config
+
+By default the configuration file is like above, you can just overides only these keys that you nned to acommodate to your need.
+
+```
+{
+  
+  "apps": { 
+    "input": "apps",
+    "styles": "css",
+    "static": "static",
+    "templates": "templates",
+    "scripts": "js",
+    "output": "public/apps"
+  },
+  
+  "vendors": {
+    "input": "vendors",
+    "distributions": {
+      "ember": ["ember.js/packages/handlebars", "ember.js/packages/ember-metal", "ember.js/packages/ember-runtime", "ember.js/packages/ember-views", "ember.js/packages/ember-states", "ember.js/packages/metamorph", "ember.js/packages/ember-handlebars"]
+    },
+    "styles": "css",
+    "static": "static",
+    "templates": "templates",
+    "scripts": "lib",
+    "output": "public/libraries"
+  },
+    
+  "server": {
+    "static": "public",
+    "port": "3000",
+    "proxy": {
+      "useProxy": false,
+      "host": "localhost",
+      "port": 3101,
+      "prefix": "^\/backend"
+    }
+  }
+  
+}
+```
+
+For example, if you need to add your frameworks and addons to the list of distributions in vendors, you can configure the ember_runner_config as:
+
+```
+{
+  
+  "vendors": {
+    "distributions": {
+      "addons": ["sproutcore-datastore/packages/sproutcore-indexset", "sproutcore-datastore/packages/sproutcore-datastore", "sproutcore-routing", "sproutcore-statechart", "sproutcore-touch/packages/sproutcore-touch"],
+      "shared": ["envone-core", "envone-desktop-ui", "envone-desktop", "business-core"]      
+    }
+  },
+  
+  "server": {
+    "proxy": {
+      "useProxy": true
+    }
+  }
+  
+}
+```
+
+Also note that you can useProxy by enabling it and add host and port if are differents.
