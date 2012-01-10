@@ -1,7 +1,7 @@
 {
   "name": "ember-runner",
   "description": "EmberJS preview and build tool for Node.JS",
-  "version": "0.1.11",
+  "version": "0.1.13",
   "author": "Juan Pablo Goldfinger (http://envone.com)",
   "bin": {
     "ember-runner": "./bin/cli.js"
