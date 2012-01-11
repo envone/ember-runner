@@ -5,15 +5,10 @@ var fs = require('fs'),
     helpers = require('./lib/helpers'),
     phantom = require('phantom'),
     pm = require('./lib/packages'),
-    args = process.argv,
     workDir = process.cwd();
 
 // Configuration vars
 var buildInfo, workFiles;
-
-// Clean args.
-args.shift(); // node
-args.shift(); // ember-runner
 
 runner.task('default', 'Run preview server', ['preview'], function(callback) {
   callback(null, true);
