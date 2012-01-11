@@ -12,6 +12,7 @@
   "vendors": {
     "input": "vendors",
     "distributions": {
+      "jquery": ["ember.js/packages/jquery-1.6.2"],
       "ember": ["ember.js/packages/handlebars", "ember.js/packages/ember-metal", "ember.js/packages/ember-runtime", "ember.js/packages/ember-views", "ember.js/packages/ember-states", "ember.js/packages/metamorph", "ember.js/packages/ember-handlebars"]
     },
     "styles": "css",
