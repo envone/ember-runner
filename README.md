@@ -66,12 +66,48 @@ The handlers are common action that you need to chain to transform a source file
 npm install -g ember-runner
 ```
 
+## Additional steps (these step will be done with generators in the future):
+
+### Create an empty ember_runner_config.json
+
+```
+{}
+```
+### Clone ember.js in vendors
+
+```
+git submodule add https://github.com/emberjs/ember.js.git vendors/ember.js
+```
+
+### Add your app:
+
+Create your application with a main.js as follow:
+
+```
+<root>
+  <myapp>
+    <css>
+      default.styl
+    <js>
+      main.js      
+````
+
+### Then the last step is to add myapp.html in the public folder with these scripts:
+
+```
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+<script>!window.jQuery && document.write(unescape('%3Cscript%20src%3D%22http%3A%2F%2Flocalhost%3A9292%2Fjs%2Flibs%2Fjquery-1.6.1.min.js%22%3E%3C%2Fscript%3E'))</script>    
+<script type="text/javascript" src="libraries/ember.js"></script>
+<script type="text/javascript" src="apps/myqpp/myapp_templates.js"></script>
+<script type="text/javascript" src="apps/myapp/myapp.js"></script>
+```
+
 ## Run
 
 In your EmberJS root directory run to run a preview develpment server
 
 ``` javascript
-ember-runner
+ember-runner preview
 ```
 # Configuring ember_runner_config
 
