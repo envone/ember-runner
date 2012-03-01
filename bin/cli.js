@@ -15,10 +15,10 @@ client.command('preview')
       .option('-t, --test', 'Also run tests')
       .action(function(env, options) {
         invoked = true;
-        runner.invoke("preview", function(err, success) {
+        runner.invoke("preview", function(err, buildInfo) {
           if (err) return console.log('Task finished with errors');
           console.log('-- Task finished succesfully');
-          console.log('ember-runner [' + pkg.version + '] Running in preview mode.');
+          console.log('ember-runner [' + pkg.version + '] Running in preview mode on port: ' + buildInfo.server.port + '.');
         });
       });
 
@@ -28,10 +28,10 @@ client.command('production')
       .action(function(env, options) {
         invoked = true;
         pm.enableMinify = true;
-        runner.invoke("preview", function(err, success) {
+        runner.invoke("preview", function(err, buildInfo) {
           if (err) return console.log('Task finished with errors');
           console.log('-- Task finished succesfully');
-          console.log('ember-runner [' + pkg.version + '] Running in production mode.');
+          console.log('ember-runner [' + pkg.version + '] Running in production mode on port: ' + buildInfo.server.port + '.');
         });
       });
 
