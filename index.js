@@ -5,6 +5,7 @@ var fs = require('fs'),
     helpers = require('./lib/helpers'),
     phantom = require('phantom'),
     pm = require('./lib/packages'),
+    exec = require('child_process').exec,    
     workDir = process.cwd();
 
 // Configuration vars
@@ -15,8 +16,8 @@ runner.task('default', 'Run preview server', ['preview'], function(callback) {
 });
 
 runner.task('preview', 'Run preview server', ['watch'], function(callback) {
-  runner.runServer(buildInfo.server, function(err, success) {
-    callback(null, true);    
+  pm.runServer(buildInfo.server, function(err, success) {
+    callback(null, buildInfo);
   });
 });
 
@@ -123,11 +124,13 @@ runner.task('task:clean', 'Clean all generated directories', function(callback) 
   var pending = 2;
   
   // remove public/apps folder
-  fs.rmdir(buildInfo.apps.output, function(err) {
+  exec('rm -rf ' + buildInfo.apps.output, function(err, stdout, stderr) {
+    if (err) callback(err, null);
     if (--pending === 0) callback(null, true);
   });
   
-  fs.rmdir(buildInfo.vendors.output, function(err) {
+  exec('rm -rf ' + buildInfo.vendors.output, function(err, stdout, stderr) {
+    if (err) callback(err, null);
     if (--pending === 0) callback(null, true);
   });
   
