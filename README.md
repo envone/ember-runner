@@ -3,7 +3,7 @@ This build tool is for the crazy ones that loves Node.JS and EmberJS, and for th
 
 ## Some of the features you will love are:
 - **Preview Mode**: Run your application in preview mode so you can debug it.
-- **Production Mode**: Run in production mode, so you can test performance, files sizes and so on. (Coming soon, when uglify handler is added)
+- **Production Mode**: Run in production mode, so you can test performance, files sizes and so on.
 - **Generator**: Will generate files for you with the ``-g`` flag. (Coming soon)
 - **Auto-Deploy**: Generates the required libraries, styles, and templates on the fly after you save the file
 - **Proxy**: Allow you to call your backend without tricks.
