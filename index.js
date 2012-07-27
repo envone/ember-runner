@@ -29,14 +29,20 @@ runner.task('watch', 'Watch for files changes', ['build'], function(callback) {
 
 runner.task('build', 'Build libraries and applications', ['task:configure', 'task:clean', 'vendors', 'apps', 'task:checkPackages', 'task:walk'], function(callback) {
   pm.build(function(err, success) {
-    var distInfos = pm.distributions,
-        pending = distInfos.length;
+    var distInfos = pm.distributions;
+
+    async.forEachSeries(distInfos, function(distInfo, inlineCallback) {
+      distInfo.distributeIt(inlineCallback);      
+    }, callback);
     
+    /*
     distInfos.forEach(function(distInfo) {
+      console.log('DIST: ' + distInfo.name);
       distInfo.distributeIt(function(err, success) {
         if (--pending === 0) callback(null, true);
       });
     });
+    */
   });
 });
 
@@ -47,7 +53,13 @@ runner.task('tests', 'Build tests', ['build'], function(callback) {
 runner.task('apps', 'Generate applications libraries', function(callback) {
   var apps = buildInfo.apps,
       distributions = apps.distributions,
-      packages, distPackages, name;
+      packages, distPackages, name, deps = [];
+  
+  for(var key in buildInfo.vendors.distributions) {
+    deps.push(key); 
+  }
+  
+  console.log(deps);
   
   for (var dist in distributions) {
     distPackages = [];
@@ -72,6 +84,7 @@ runner.task('apps', 'Generate applications libraries', function(callback) {
     pm.createDistInfo({
       isApp: true,
       name: dist,
+      dependencies: deps,
       packages: distPackages,
       output: [buildInfo.apps.output, dist].join('/')
     });    
@@ -83,7 +96,7 @@ runner.task('apps', 'Generate applications libraries', function(callback) {
 runner.task('vendors', 'Generate vendors libraries', function(callback) {
   var vendors = buildInfo.vendors,
       distributions = vendors.distributions,
-      packages, distPackages, name;
+      packages, distPackages, name, distDependencies = [];
 
   for (var dist in distributions) {    
     distPackages = [];
@@ -104,13 +117,16 @@ runner.task('vendors', 'Generate vendors libraries', function(callback) {
         scripts: vendors.scripts
       }));
     });
-    
+
     pm.createDistInfo({
       isVendor: true,
       name: dist,
+      dependencies: distDependencies.length > 0 ? distDependencies.slice(0) : null,
       packages: distPackages,
       output: buildInfo.vendors.output
     });
+    
+    distDependencies.push(dist);
   }
   
   callback(null, true);

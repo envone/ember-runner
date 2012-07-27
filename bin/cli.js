@@ -28,6 +28,7 @@ client.command('production')
       .action(function(env, options) {
         invoked = true;
         pm.enableMinify = true;
+        pm.enableTemplatePrecompilation = true;
         runner.invoke("preview", function(err, buildInfo) {
           if (err) return console.log('Task finished with errors');
           console.log('-- Task finished succesfully');
