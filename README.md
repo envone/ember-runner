@@ -46,7 +46,7 @@ The handlers are common action that you need to chain to transform a source file
 ## Published Handlers
 
 - **encloseExportFunction**: For each file enclose to be ready for use in your browser
-- **includeTemplate**: Add .handlebars file to Ember.TEMPLATES collection, so your view can found it.
+- **includeTemplate**: Add .handlebars file to Ember.TEMPLATES collection, so your view can find it.
 - **removeRequires**: This handlers removes all require('*') found in each .js scripts.
 - **less**: Transform your less style to css
 
