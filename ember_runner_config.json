@@ -16,6 +16,7 @@
                 "ember.js/packages/ember-application",
                 "ember.js/packages/ember-views",
                 "ember.js/packages/ember-states",
+                "ember.js/packages/ember-routing",
                 "ember.js/packages/metamorph",
                 "ember.js/packages/ember-handlebars"
             ]
