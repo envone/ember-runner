@@ -37,7 +37,7 @@ client.command('production')
       });
 
 client.command('generator')
-      .description('ember-runner code generator, to quickling create templates of common files and patterns')
+      .description('ember-runner code generator, to quickly create templates of common files and patterns')
       .action(function(env, options) {
         invoked = true;
         console.log('ember-runner [' + pkg.version + '] Generator (Coming Soon).');
