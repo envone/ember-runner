@@ -154,54 +154,54 @@ runner.task('task:clean', 'Clean all generated directories', function(callback) 
 
 runner.task('task:configure', 'Retrieve configuration parameters', ['task:checkConfig'], function(callback) {
   var self = this, key, devBuildInfo;
-  
+
   fs.readFile([__dirname, 'ember_runner_config.json'].join('/'), function(err, file) {
     if (err) return callback("Error no ember_runner_config.json file found");
-    
+
     buildInfo = JSON.parse(file);
-    
+
     fs.readFile([workDir, 'ember_runner_config.json'].join('/'), function(err, file) {
       if (err) return callback("Error no ember_runner_config.json file found");
 
       devBuildInfo = JSON.parse(file);
-    
+
       // merge devBuildInfo keys with buildInfo
-      
+
       // first apps
       if (devBuildInfo.apps) {
-        for(key in devBuildInfo.apps) { 
-          buildInfo.apps[key] = devBuildInfo.apps[key]; 
+        for(key in devBuildInfo.apps) {
+          buildInfo.apps[key] = devBuildInfo.apps[key];
         }
       }
-      
-      // then vendors without distribution
+
+      // then vendors
       if (devBuildInfo.vendors) {
-        for(key in devBuildInfo.vendors) { 
+        for(key in devBuildInfo.vendors) {
           if (key != 'distributions') buildInfo.vendors[key] = devBuildInfo.vendors[key];
         }
-      }
-      
-      // vendor's distribution
-      if (devBuildInfo.vendors.distributions) {
-        for(key in devBuildInfo.vendors.distributions) { 
-          buildInfo.vendors.distributions[key] = devBuildInfo.vendors.distributions[key];
+
+        // vendor's distribution
+        if (devBuildInfo.vendors.distributions) {
+          for(key in devBuildInfo.vendors.distributions) {
+            buildInfo.vendors.distributions[key] = devBuildInfo.vendors.distributions[key];
+          }
         }
       }
-      
-      // server without proxies
+
+      // server
       if (devBuildInfo.server) {
-        for(key in devBuildInfo.server) { 
+        for(key in devBuildInfo.server) {
           if (key != 'proxy') buildInfo.server[key] = devBuildInfo.server[key];
         }
-      }
-      
-      // server's proxy
-      if (devBuildInfo.server.proxy) {
-        for(key in devBuildInfo.server.proxy) { 
-          buildInfo.server.proxy[key] = devBuildInfo.server.proxy[key];
+
+        // server's proxy
+        if (devBuildInfo.server.proxy) {
+          for(key in devBuildInfo.server.proxy) {
+            buildInfo.server.proxy[key] = devBuildInfo.server.proxy[key];
+          }
         }
       }
-      
+
       // Generate generics attributes
       buildInfo.srcApps = [workDir, buildInfo.apps.input].join('/');
       buildInfo.srcVendors = [workDir, buildInfo.vendors.input].join('/');
@@ -215,18 +215,18 @@ runner.task('task:configure', 'Retrieve configuration parameters', ['task:checkC
         buildInfo.apps.distributions = {};
         fs.readdir(buildInfo.srcApps, function(err, lists) {
           if (err) return callback("There no applications found, nothing to do.\nCreate one with ember-runner -g app <your app>");
-        
+
           lists.forEach(function(list) {
             buildInfo.apps.distributions[list] = [list];
           });
-        
-          callback(null, true);        
+
+          callback(null, true);
         });
       } else {
         callback(null, true);
       }
-      
-    });      
+
+    });
   });
 });
 
