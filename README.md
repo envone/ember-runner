@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/envone/ember-runner.png)](http://travis-ci.org/envone/ember-runner)
 # Introducing ember-runner
 This build tool is for the crazy ones that loves Node.JS and EmberJS, and for these one that loves simplicty too. In an clean and easy way you can run a preview of your application instantly in production mode or by previewing a development mode that you can debug your files more easily.
 
