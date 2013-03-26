@@ -12,7 +12,7 @@ var fs = require('fs'),
 var buildInfo, workFiles;
 
 runner.task('default', 'Run preview server', ['preview'], function(callback) {
-  callback(null, true);
+  callback(null);
 });
 
 runner.task('preview', 'Run preview server', ['watch'], function(callback) {
@@ -23,7 +23,7 @@ runner.task('preview', 'Run preview server', ['watch'], function(callback) {
 
 runner.task('watch', 'Watch for files changes', ['build'], function(callback) {
   pm.watchForChanges(function(err, success) {
-    callback(null, true);
+    callback(null);
   });
 });
 
@@ -47,7 +47,7 @@ runner.task('build', 'Build libraries and applications', ['task:configure', 'tas
 });
 
 runner.task('tests', 'Build tests', ['build'], function(callback) {
-  callback(null, true);
+  callback(null);
 });
 
 runner.task('apps', 'Generate applications libraries', function(callback) {
@@ -90,7 +90,7 @@ runner.task('apps', 'Generate applications libraries', function(callback) {
     });    
   }
   
-  callback(null, true);
+  callback(null);
 });
 
 runner.task('vendors', 'Generate vendors libraries', function(callback) {
@@ -129,7 +129,7 @@ runner.task('vendors', 'Generate vendors libraries', function(callback) {
     distDependencies.push(dist);
   }
   
-  callback(null, true);
+  callback(null);
 });
 
 // ================
@@ -141,13 +141,13 @@ runner.task('task:clean', 'Clean all generated directories', function(callback) 
   
   // remove public/apps folder
   exec('rm -rf ' + buildInfo.apps.output, function(err, stdout, stderr) {
-    if (err) callback(err, null);
-    if (--pending === 0) callback(null, true);
+    if (err) callback(err);
+    if (--pending === 0) callback(null);
   });
   
   exec('rm -rf ' + buildInfo.vendors.output, function(err, stdout, stderr) {
     if (err) callback(err, null);
-    if (--pending === 0) callback(null, true);
+    if (--pending === 0) callback(null);
   });
   
 });
@@ -220,10 +220,10 @@ runner.task('task:configure', 'Retrieve configuration parameters', ['task:checkC
             buildInfo.apps.distributions[list] = [list];
           });
 
-          callback(null, true);
+          callback(null);
         });
       } else {
-        callback(null, true);
+        callback(null);
       }
 
     });
@@ -253,7 +253,7 @@ runner.task('task:walk', 'Check for all files to be used', function(callback) {
       files: results[0].files.concat(results[1].files)
     };
 
-    callback(null, true);
+    callback(null);
   });
   
 });
@@ -261,7 +261,7 @@ runner.task('task:walk', 'Check for all files to be used', function(callback) {
 runner.task('task:checkConfig', 'Check if the working directory is a valid ember-runner project', function(callback) {
   fs.stat('ember_runner_config.json', function(err, stat) {
     if (err) return callback("This is not a valid ember-runner project, no ember_runner_config.json found.\nGenerate one with: ember-runner --initialize/-i", true);
-    callback(null, true);
+    callback(null);
   });
 });
   
@@ -277,7 +277,7 @@ runner.task('task:checkPackages', 'Retrieve configuration parameters', function(
       if (err) errors.push('Package: ' + pack.name +' ([' + (pack.isVendor ? 'vendors' : 'apps') +'/]' + pack.smallPath + ') not found, please add it in vendors');
       if (--pending === 0) {
         if (errors.length > 0) return callback(errors.join('\n'));
-        callback(null, true);
+        callback(null);
       }
     });
   });
