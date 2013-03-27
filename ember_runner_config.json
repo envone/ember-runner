@@ -11,14 +11,18 @@
         "input": "vendors",
         "distributions": {
             "ember": [
+                "ember.js/packages/loader",
                 "ember.js/packages/ember-metal",
+                "ember.js/packages/rsvp",
+                "ember.js/packages/container",
                 "ember.js/packages/ember-runtime",
-                "ember.js/packages/ember-application",
-                "ember.js/packages/ember-views",
-                "ember.js/packages/ember-states",
-                "ember.js/packages/ember-routing",
+                "ember.js/packages/ember-views",        
                 "ember.js/packages/metamorph",
-                "ember.js/packages/ember-handlebars"
+                "ember.js/packages/ember-handlebars-compiler",
+                "ember.js/packages/ember-handlebars",
+                "ember.js/packages/ember-routing",
+                "ember.js/packages/ember-application",
+                "ember.js/packages/ember-states"
             ]
         },
         "styles": "css",
