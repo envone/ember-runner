@@ -1,7 +1,7 @@
 {
   "name": "ember-runner",
   "description": "EmberJS preview and build tool for Node.JS",
-  "version": "0.1.33",
+  "version": "0.1.34",
   "author": "Juan Pablo Goldfinger (http://envone.com)",
   "contributors": [ 
     { "name": "Ryan C. Payne", "email": "ryan@coradine.com" }

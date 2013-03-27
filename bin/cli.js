@@ -10,6 +10,8 @@ var er = require('../'),
     invoked = false,
     pkg = JSON.parse(fs.readFileSync(__dirname + '/../package.json').toString());
 
+client.version(pkg.version);
+
 client.command('preview')
       .description('Run ember-runner server in debug mode, scripts are not minified.')
       .option('-t, --test', 'Also run tests')
