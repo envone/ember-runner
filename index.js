@@ -210,6 +210,8 @@ runner.task('task:configure', 'Retrieve configuration parameters', ['task:checkC
       buildInfo.tgtApps = [workDir, buildInfo.apps.output].join('/');
       buildInfo.tgtVendors = [workDir, buildInfo.vendors.output].join('/');
 
+      var regexp = new RegExp("^\\."), dir, stats;
+
       // Generate apps distribution if not found
       if (!buildInfo.apps.distributions) {
         buildInfo.apps.distributions = {};
@@ -217,7 +219,19 @@ runner.task('task:configure', 'Retrieve configuration parameters', ['task:checkC
           if (err) return callback("There no applications found, nothing to do.\nCreate one with ember-runner -g app <your app>");
 
           lists.forEach(function(list) {
-            buildInfo.apps.distributions[list] = [list];
+            // check if the file doesn't start with dot            
+            if (!regexp.exec(list)) {
+              // check if are also a directory
+              dir = [buildInfo.srcApps, list].join('/');
+              
+              stats = fs.lstatSync(dir);
+
+              // Is it a directory?
+              if (stats.isDirectory()) {
+                // Yes it is
+                buildInfo.apps.distributions[list] = [list];
+              }
+            }
           });
 
           callback(null);
