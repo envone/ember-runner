@@ -7,7 +7,7 @@ have two ways to run your local copy
 
 Or if you use nvm, you can follow these steps:
 
-1. cd {path_to_nvm}/v0.8.14/bin/node (by doing 'which node')
-2. ln -s {path_to_local_ember_runner}/ember-runner/bin/cli.js ember-local
+1. cd {path_to_nvm}/v0.8.14/bin (by doing 'which node')
+2. ln -s {path_to_local_ember_runner}/bin/cli.js ember-local
 
 And then run 'ember-local preview' or 'ember-local production'.
