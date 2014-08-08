@@ -177,14 +177,7 @@ runner.task('task:configure', 'Retrieve configuration parameters', ['task:checkC
       // then vendors
       if (devBuildInfo.vendors) {
         for(key in devBuildInfo.vendors) {
-          if (key != 'distributions') buildInfo.vendors[key] = devBuildInfo.vendors[key];
-        }
-
-        // vendor's distribution
-        if (devBuildInfo.vendors.distributions) {
-          for(key in devBuildInfo.vendors.distributions) {
-            buildInfo.vendors.distributions[key] = devBuildInfo.vendors.distributions[key];
-          }
+          buildInfo.vendors[key] = devBuildInfo.vendors[key];
         }
       }
 
