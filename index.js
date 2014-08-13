@@ -5,7 +5,8 @@ var fs = require('fs'),
     helpers = require('./lib/helpers'),
     phantom = require('phantom'),
     pm = require('./lib/packages'),
-    exec = require('child_process').exec,    
+    Y = require('yuidocjs'),
+    exec = require('child_process').exec, 
     workDir = process.cwd();
 
 // Configuration vars
@@ -17,7 +18,20 @@ runner.task('default', 'Run preview server', ['preview'], function(callback) {
 
 runner.task('preview', 'Run preview server', ['watch'], function(callback) {
   pm.runServer(buildInfo.server, function(err, success) {
-    callback(null, buildInfo);
+    if (buildInfo.server.docs) {
+      var options, opts;
+
+      options = buildInfo.server.docs;
+      options = Y.Project.init(options);
+
+      opts = Y.clone(options);
+
+      Y.log(opts, 'info', 'yuidoc');
+
+      Y.Server.start(options);
+    } else {
+      callback(null, buildInfo);
+    }    
   });
 });
 
