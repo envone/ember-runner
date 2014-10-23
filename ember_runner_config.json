@@ -23,10 +23,6 @@
             "host": "localhost",
             "port": 3101,
             "prefix": "^/backend"
-        },
-        "docs": {
-            "port": 5000,
-            "yiudocPath": "docs/yuidoc.json"
         }
     }
 }

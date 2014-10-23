@@ -38,6 +38,20 @@ client.command('production')
         });
       });
 
+client.command('dist')
+      .description('Run ember-runner to generate disrtibution libraries for production mode, scripts are minified.')
+      .option('-t, --test', 'Also run tests')
+      .action(function(env, options) {
+        invoked = true;
+        pm.enableMinify = true;
+        pm.enableTemplatePrecompilation = true;
+        runner.invoke("dist", function(err, buildInfo) {
+          if (err) return console.log('Task finished with errors');
+          console.log('-- Task finished succesfully');
+          console.log('ember-runner [' + pkg.version + '] distribution generated.');
+        });
+      });
+
 client.command('generator')
       .description('ember-runner code generator, to quickly create templates of common files and patterns')
       .action(function(env, options) {

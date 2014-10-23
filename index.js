@@ -5,7 +5,6 @@ var fs = require('fs'),
     helpers = require('./lib/helpers'),
     phantom = require('phantom'),
     pm = require('./lib/packages'),
-    Y = require('yuidocjs'),
     exec = require('child_process').exec, 
     workDir = process.cwd();
 
@@ -18,6 +17,8 @@ runner.task('default', 'Run preview server', ['preview'], function(callback) {
 
 runner.task('preview', 'Run preview server', ['watch'], function(callback) {
   pm.runServer(buildInfo.server, function(err, success) {
+    var Y = require('yuidocjs');
+
     if (buildInfo.server.docs) {
       var options, opts;
 
@@ -41,22 +42,24 @@ runner.task('watch', 'Watch for files changes', ['build'], function(callback) {
   });
 });
 
-runner.task('build', 'Build libraries and applications', ['task:configure', 'task:clean', 'vendors', 'apps', 'task:checkPackages', 'task:walk'], function(callback) {
+runner.task('dist', 'Build libraries and applications', ['task:configure', 'task:clean', 'vendors', 'apps', 'task:checkPackages', 'task:walk'], function(callback) {
   pm.build(function(err, success) {
     var distInfos = pm.distributions;
 
     async.forEachSeries(distInfos, function(distInfo, inlineCallback) {
       distInfo.distributeIt(inlineCallback);      
     }, callback);
-    
-    /*
-    distInfos.forEach(function(distInfo) {
-      console.log('DIST: ' + distInfo.name);
-      distInfo.distributeIt(function(err, success) {
-        if (--pending === 0) callback(null, true);
-      });
-    });
-    */
+  });
+});
+
+runner.task('build', 'Build libraries and applications', ['task:configure', 'task:clean', 'vendors', 'apps', 'task:checkPackages', 'task:walk'], function(callback) {
+  pm.build(function(err, success) {
+    console.log(err);
+    var distInfos = pm.distributions;
+
+    async.forEachSeries(distInfos, function(distInfo, inlineCallback) {
+      distInfo.distributeIt(inlineCallback);      
+    }, callback);
   });
 });
 
@@ -72,9 +75,7 @@ runner.task('apps', 'Generate applications libraries', function(callback) {
   for(var key in buildInfo.vendors.distributions) {
     deps.push(key); 
   }
-  
-  console.log(deps);
-  
+
   for (var dist in distributions) {
     distPackages = [];
     
@@ -82,7 +83,7 @@ runner.task('apps', 'Generate applications libraries', function(callback) {
     packages.forEach(function(pack) {
       name = pack.split('/');
       name = name[name.length - 1];
-      
+
       distPackages.push(pm.createPackage({
         isApp: true,
         name: name,
@@ -103,7 +104,7 @@ runner.task('apps', 'Generate applications libraries', function(callback) {
       output: [buildInfo.apps.output, dist].join('/')
     });    
   }
-  
+
   callback(null);
 });
 
