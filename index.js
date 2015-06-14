@@ -59,7 +59,12 @@ runner.task('build', 'Build libraries and applications', ['task:configure', 'tas
 
     async.forEachSeries(distInfos, function(distInfo, inlineCallback) {
       distInfo.distributeIt(inlineCallback);      
-    }, callback);
+    }, function() {
+      exec('ln -s ../../assets assets', { cwd: buildInfo.apps.output }, function(err, stdout, stderr) {
+        if (err) callback(err);
+        callback(null);
+      });
+    });
   });
 });
 
@@ -168,86 +173,98 @@ runner.task('task:clean', 'Clean all generated directories', function(callback) 
 });
 
 runner.task('task:configure', 'Retrieve configuration parameters', ['task:checkConfig'], function(callback) {
-  var self = this, key, devBuildInfo;
+  var self = this, key, devBuildInfo, packageInfo, version;
 
   fs.readFile([__dirname, 'ember_runner_config.json'].join('/'), function(err, file) {
     if (err) return callback("Error no ember_runner_config.json file found");
 
     buildInfo = JSON.parse(file);
 
-    fs.readFile([workDir, 'ember_runner_config.json'].join('/'), function(err, file) {
-      if (err) return callback("Error no ember_runner_config.json file found");
+    fs.readFile([workDir, 'package.json'].join('/'), function(err, file) {
+      if (err) return callback("Error no package.json file found");
 
-      devBuildInfo = JSON.parse(file);
+      packageInfo = JSON.parse(file);
 
-      // merge devBuildInfo keys with buildInfo
+      fs.readFile([workDir, 'ember_runner_config.json'].join('/'), function(err, file) {
+        if (err) return callback("Error no ember_runner_config.json file found");
 
-      // first apps
-      if (devBuildInfo.apps) {
-        for(key in devBuildInfo.apps) {
-          buildInfo.apps[key] = devBuildInfo.apps[key];
-        }
-      }
+        devBuildInfo = JSON.parse(file);
 
-      // then vendors
-      if (devBuildInfo.vendors) {
-        for(key in devBuildInfo.vendors) {
-          buildInfo.vendors[key] = devBuildInfo.vendors[key];
-        }
-      }
+        // merge devBuildInfo keys with buildInfo
 
-      // server
-      if (devBuildInfo.server) {
-        for(key in devBuildInfo.server) {
-          if (key != 'proxy') buildInfo.server[key] = devBuildInfo.server[key];
-        }
-
-        // server's proxy
-        if (devBuildInfo.server.proxy) {
-          for(key in devBuildInfo.server.proxy) {
-            buildInfo.server.proxy[key] = devBuildInfo.server.proxy[key];
+        // first apps
+        if (devBuildInfo.apps) {
+          for(key in devBuildInfo.apps) {
+            buildInfo.apps[key] = devBuildInfo.apps[key];
           }
         }
-      }
 
-      // Generate generics attributes
-      buildInfo.srcApps = [workDir, buildInfo.apps.input].join('/');
-      buildInfo.srcVendors = [workDir, buildInfo.vendors.input].join('/');
-      buildInfo.tmpApps = [workDir, buildInfo.tmpDir, buildInfo.apps.input].join('/');
-      buildInfo.tmpVendors = [workDir, buildInfo.tmpDir, buildInfo.vendors.input].join('/');
-      buildInfo.tgtApps = [workDir, buildInfo.apps.output].join('/');
-      buildInfo.tgtVendors = [workDir, buildInfo.vendors.output].join('/');
+        // then vendors
+        if (devBuildInfo.vendors) {
+          for(key in devBuildInfo.vendors) {
+            buildInfo.vendors[key] = devBuildInfo.vendors[key];
+          }
+        }
 
-      var regexp = new RegExp("^\\."), dir, stats;
+        // server
+        if (devBuildInfo.server) {
+          for(key in devBuildInfo.server) {
+            if (key != 'proxy') buildInfo.server[key] = devBuildInfo.server[key];
+          }
 
-      // Generate apps distribution if not found
-      if (!buildInfo.apps.distributions) {
-        buildInfo.apps.distributions = {};
-        fs.readdir(buildInfo.srcApps, function(err, lists) {
-          if (err) return callback("There no applications found, nothing to do.\nCreate one with ember-runner -g app <your app>");
-
-          lists.forEach(function(list) {
-            // check if the file doesn't start with dot            
-            if (!regexp.exec(list)) {
-              // check if are also a directory
-              dir = [buildInfo.srcApps, list].join('/');
-              
-              stats = fs.lstatSync(dir);
-
-              // Is it a directory?
-              if (stats.isDirectory()) {
-                // Yes it is
-                buildInfo.apps.distributions[list] = [list];
-              }
+          // server's proxy
+          if (devBuildInfo.server.proxy) {
+            for(key in devBuildInfo.server.proxy) {
+              buildInfo.server.proxy[key] = devBuildInfo.server.proxy[key];
             }
+          }
+        }
+
+        // append package version to output
+        version = packageInfo.version;
+
+        buildInfo.apps.output =  [buildInfo.apps.output, version].join('/');
+        buildInfo.vendors.output = [buildInfo.vendors.output, version].join('/');
+
+        // Generate generics attributes
+        buildInfo.srcApps = [workDir, buildInfo.apps.input].join('/');
+        buildInfo.srcVendors = [workDir, buildInfo.vendors.input].join('/');
+        buildInfo.tmpApps = [workDir, buildInfo.tmpDir, buildInfo.apps.input].join('/');
+        buildInfo.tmpVendors = [workDir, buildInfo.tmpDir, buildInfo.vendors.input].join('/');
+        buildInfo.tgtApps = [workDir, buildInfo.apps.output].join('/');
+        buildInfo.tgtVendors = [workDir, buildInfo.vendors.output].join('/');
+
+        var regexp = new RegExp("^\\."), dir, stats;
+
+        // Generate apps distribution if not found
+        if (!buildInfo.apps.distributions) {
+          buildInfo.apps.distributions = {};
+          fs.readdir(buildInfo.srcApps, function(err, lists) {
+            if (err) return callback("There no applications found, nothing to do.\nCreate one with ember-runner -g app <your app>");
+
+            lists.forEach(function(list) {
+              // check if the file doesn't start with dot            
+              if (!regexp.exec(list)) {
+                // check if are also a directory
+                dir = [buildInfo.srcApps, list].join('/');
+                
+                stats = fs.lstatSync(dir);
+
+                // Is it a directory?
+                if (stats.isDirectory()) {
+                  // Yes it is
+                  buildInfo.apps.distributions[list] = [list];
+                }
+              }
+            });
+
+            callback(null);
           });
-
+        } else {
           callback(null);
-        });
-      } else {
-        callback(null);
-      }
+        }
 
+      });
     });
   });
 });
