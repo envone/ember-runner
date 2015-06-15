@@ -1,7 +1,7 @@
 {
   "name": "ember-runner",
   "description": "EmberJS preview and build tool for Node.JS",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "author": "Juan Pablo Goldfinger (http://envone.com)",
   "contributors": [ 
     { "name": "Ryan C. Payne", "email": "ryan@coradine.com" }
@@ -12,12 +12,12 @@
   "dependencies": {
     "async": ">= 0.2.6",
     "express": "3.5.0",
-    "http-proxy": "1.0.2",
+    "http-proxy": "1.11.1",
     "less": ">= 1.1.6",
     "mkdirp": ">= 0.2.2",
     "watch": ">= 0.5.0",
-    "stylus": "0.28.x",
-    "nib": ">= 1.0",
+    "stylus": "0.51.1",
+    "nib": "1.1.0",
     "phantom": ">= 0.3.2",
     "commander": ">= 1.0.0",
     "uglify-js": "1.3.3",
