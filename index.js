@@ -48,13 +48,17 @@ runner.task('dist', 'Build libraries and applications', ['task:configure', 'task
 
     async.forEachSeries(distInfos, function(distInfo, inlineCallback) {
       distInfo.distributeIt(inlineCallback);      
-    }, callback);
+    }, function() {
+      exec('ln -s ../../assets assets', { cwd: buildInfo.apps.output }, function(err, stdout, stderr) {
+        if (err) callback(err);
+        callback(null);
+      });
+    });
   });
 });
 
 runner.task('build', 'Build libraries and applications', ['task:configure', 'task:clean', 'vendors', 'apps', 'task:checkPackages', 'task:walk'], function(callback) {
   pm.build(function(err, success) {
-    console.log(err);
     var distInfos = pm.distributions;
 
     async.forEachSeries(distInfos, function(distInfo, inlineCallback) {
