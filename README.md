@@ -111,7 +111,7 @@ ember-runner preview
 ```
 # Configuring ember_runner_config
 
-By default the configuration file is like above, you can just overide only these keys that you need to acommodate for your project.
+By default the configuration file is like above, you can just overide only these keys that you need to accommodate for your project.
 
 ```
 {
