@@ -1,7 +1,7 @@
 {
   "name": "ember-runner",
   "description": "EmberJS preview and build tool for Node.JS",
-  "version": "0.2.9",
+  "version": "0.3.0",
   "author": "Juan Pablo Goldfinger (http://envone.com)",
   "contributors": [ 
     { "name": "Ryan C. Payne", "email": "ryan@coradine.com" }
@@ -10,7 +10,7 @@
     "ember-runner": "./bin/cli.js"
   },
   "dependencies": {
-    "async": ">= 0.2.6",
+    "async": "0.9.0",
     "express": "3.5.0",
     "http-proxy": "1.11.1",
     "less": ">= 1.1.6",
