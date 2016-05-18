@@ -18,7 +18,7 @@ client.command('preview')
       .action(function(env, options) {
         invoked = true;
         runner.invoke("preview", function(err, buildInfo) {
-          if (err) return console.log('Task finished with errors');
+          if (err) return console.log('Task finished with errors', err);
           console.log('-- Task finished succesfully');
           console.log('ember-runner [' + pkg.version + '] Running in preview mode on port: ' + buildInfo.server.port + '.');
         });
@@ -32,7 +32,7 @@ client.command('production')
         pm.enableMinify = true;
         pm.enableTemplatePrecompilation = true;
         runner.invoke("preview", function(err, buildInfo) {
-          if (err) return console.log('Task finished with errors');
+          if (err) return console.log('Task finished with errors', err);
           console.log('-- Task finished succesfully');
           console.log('ember-runner [' + pkg.version + '] Running in production mode on port: ' + buildInfo.server.port + '.');
         });
@@ -46,7 +46,7 @@ client.command('dist')
         pm.enableMinify = true;
         pm.enableTemplatePrecompilation = true;
         runner.invoke("dist", function(err, buildInfo) {
-          if (err) return console.log('Task finished with errors');
+          if (err) return console.log('Task finished with errors', err);
           console.log('-- Task finished succesfully');
           console.log('ember-runner [' + pkg.version + '] distribution generated.');
         });
