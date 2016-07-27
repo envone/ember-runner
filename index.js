@@ -217,9 +217,10 @@ runner.task('task:configure', 'Retrieve configuration parameters', ['task:checkC
 
           // server's proxy
           if (devBuildInfo.server.proxy) {
-            for(key in devBuildInfo.server.proxy) {
-              buildInfo.server.proxy[key] = devBuildInfo.server.proxy[key];
-            }
+            buildInfo.server.proxy = devBuildInfo.server.proxy;
+            // for(key in devBuildInfo.server.proxy) {
+            //   buildInfo.server.proxy[key] = devBuildInfo.server.proxy[key];
+            // }
           }
         }
 
